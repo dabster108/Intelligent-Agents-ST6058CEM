@@ -2,7 +2,8 @@ A = (0, 0)
 B = (1, 0)
 
 
-state = {    A: "Unknown",
+state = { 
+    A: "Unknown",
     B: "Unknown",
     "location": None    
 }
