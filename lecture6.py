@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
+from collections import deque
 # 0 = path (white), 1 = wall (black)
 maze = np.array([
     [1,0,1,1,1,1,1,1,1,0,1,1],
@@ -40,11 +40,103 @@ ax.set_yticks([])
 ax.set_title("Maze From Reference Image")
 plt.show()
 
+# find all the available nodes, 
+# save a list of all the "0" node in this maze
+nodes = []
+for row in range(len(maze)):
+    for col in range(len(maze[row])):
+        if maze[row][col] == 0:
+            nodes.append((row, col))
 
+#find all the available nodes,
+nodes_available = []
 for i in range(maze.shape[0]):
     for j in range(maze.shape[1]):
-        if maze[i, j] == 0:
-            print(" ", end="")
-        else:
-            print("#", end="")
-    print()
+        if maze[i,j] == 0 : 
+            print(" " , end = "" ) 
+            nodes_available.append((i,j))
+print(nodes_available)
+
+
+
+
+possible_direction = ((0,1) , (0,-1) , (1,0) ,(1,0) ,(-1,0))
+#for each nnodes make a a graph that can traverse through possible direction 
+# add edges/neighbors only if nodeis white  "0" 
+
+# for each possible direction 
+#nenext row = row + d_row
+#next_col = col + d_col
+
+graph = {}
+edges = []
+
+for row, col in nodes:
+    current = (row, col)
+    neighbors = []
+    for d_row, d_col in possible_direction:
+        next_row = row + d_row
+        next_col = col + d_col
+        if 0 <= next_row < rows and 0 <= next_col < cols and maze[next_row, next_col] == 0:
+            neighbor = (next_row, next_col)
+            neighbors.append(neighbor)
+            if current < neighbor:
+                edges.append((current, neighbor))
+        graph[current] = neighbors 
+
+
+
+
+def bfs_path(graph, start_node, goal_node):
+    queue = deque([start_node])
+    parents = {start_node: None}
+    while queue:
+        current = queue.popleft()
+        if current == goal_node:
+            break
+        for neighbor in graph[current]:
+            if neighbor not in parents:
+                parents[neighbor] = current
+                queue.append(neighbor)
+    if goal_node not in parents:
+        return None
+
+    path = []
+    current = goal_node
+    while current is not None:
+        path.append(current)
+        current = parents[current]
+
+    path.reverse()
+    return path
+bfs_path(graph, start, goal)
+
+
+
+# dfs path 
+def dfs_path(graph, start_node, goal_node):
+    stack = [start_node]
+    parents = {start_node: None}
+    while stack:
+        current = stack.pop()
+        if current == goal_node:
+            break
+        for neighbor in graph[current]:
+            if neighbor not in parents:
+                parents[neighbor] = current
+                stack.append(neighbor)
+    if goal_node not in parents:
+        return None
+
+    path = []
+    current = goal_node
+    while current is not None:
+        path.append(current)
+        current = parents[current]
+
+    path.reverse()
+    return path
+dfs_path(graph, start, goal)
+
+
+
