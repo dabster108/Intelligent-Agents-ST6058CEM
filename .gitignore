@@ -2,3 +2,6 @@ venv/
 ./venv/
 *.osm
 planet_85.296_27.674_35de85b6.osm
+lecture8.ipynb
+task.osm
+.ipynb_checkpoints/
