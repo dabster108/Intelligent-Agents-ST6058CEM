@@ -1,8 +1,8 @@
 (define
-    (problem switch-problem)
+    (problem switch-prob)
     (:domain light-switch)
     (:objects
-        icr3 lr4 lr5 - switch
+        icr3 lr3 lr4 lr5 - switch
     )
     (:init
         (on icr3)
